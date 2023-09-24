@@ -7,10 +7,19 @@ before_install:
   - docker build -t vanausloos/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true vanausloos/react-test npm teste
+  - docker run -e CI=true vanausloos/react-test npm test
 
 after_success:
   - docker build -t vanausloos/multi-client ./client
   - docker build -t vanausloos/multi-nginx ./nginx
   - docker build -t vanausloos/multi-server ./server
   - docker build -t vanausloos/multi-worker ./worker
+
+  #login to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin  
+
+  # take those images and push them to docker hub
+  - docker push vanausloos/multi-client
+  - docker push vanausloos/multi-nginx
+  - docker push vanausloos/multi-server
+  - docker push vanausloos/multi-worker
