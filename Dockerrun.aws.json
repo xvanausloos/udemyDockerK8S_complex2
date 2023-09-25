@@ -1,0 +1,33 @@
+{
+	"AWSEBDockerrunVersion": 2,
+	"containerDefinitions": [{
+			"name": "client",
+			"image": "vanausloos/multi-client",
+			"hostname": "client",
+			"essential": false
+		},
+		{
+			"name": "server",
+			"image": "vanausloos/multi-server",
+			"hostname": "api",
+			"essential": false
+		},
+		{
+			"name": "worker",
+			"image": "vanausloos/multi-worker",
+			"hostname": "worker",
+			"essential": false
+		},
+		{
+			"name": "nginx",
+			"image": "vanausloos/multi-nginx",
+			"hostname": "nginx",
+			"essential": true,
+			"portMappings": [{
+				"hostPort": 80,
+				"containerPort": 80
+			}],
+			"links": ["client", "server"]
+		}
+	]
+}
